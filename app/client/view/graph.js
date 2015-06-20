@@ -22,7 +22,8 @@ Template.graph.rendered = function(){
   var target;
 
   var force = d3.layout.force()
-    .linkDistance(80)
+    .linkDistance(200)
+    .linkStrength(.5)
     .charge(-160)
     .gravity(.05)
     .size([1200, 500])
@@ -62,8 +63,7 @@ Template.graph.rendered = function(){
     if(isFresh){
       DOMnodes.enter()
         .append("circle")
-        .attr("class",function(d) { return "node " + d.type; })
-        .attr("r", function(d) { return (Math.abs(d.value) + 5) * 1.5; }) // handles negative values
+        .attr("class",function(d) { return "node"})
         .attr("_id", function(d) { return "node" + d._id; })
         .on("mouseover", mouseover)
         .on("dblclick", doubleclick)

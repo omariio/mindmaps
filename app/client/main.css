@@ -98,8 +98,10 @@
 	border:1px solid;
 }
 .node {
-  	stroke: #000;
-  	stroke-width: 0;
+    r: 50;
+    stroke-width: 1;
+    stroke:#000;
+    fill:#fff;
 }
 
 .statement{
@@ -114,9 +116,9 @@
 	stroke:#0000ff;
 }
 
-#edges {
+.edge {
+  stroke-width: 3px;
   stroke: #000;
-  stroke-width: 1px;
 }
 
 .comment-edge {
@@ -166,7 +168,6 @@ select:hover {
 */
 #potential-edge {
 	stroke: #0000FF;
-  stroke-width: 1.5px;
 }
 
 .selected {
