@@ -17,7 +17,10 @@
 						<input type="text" id="input-title" value="{{selected.title}}" />
 						<button id="save-title">save</button>
 					{{else}}
-						{{selected.title}} <a><i id="edit-title" class="fa fa-pencil"></i></a>
+						{{selected.title}}
+							{{#if currentUser}}
+								<a><i id="edit-title" class="fa fa-pencil"></i></a>
+							{{/if}}
 					{{/if}}
 				</div>
 				<div>
@@ -26,7 +29,10 @@
 						<textarea id="textarea-body">{{selected.body}}</textarea>
 						<button id="save-body">save</button>
 					{{else}}
-						{{selected.body}} <a><i id="edit-body" class="fa fa-pencil"></i></a>
+						{{selected.body}}
+						{{#if currentUser}}
+							<a><i id="edit-body" class="fa fa-pencil"></i></a>
+						{{/if}}
 					{{/if}}
 				</div>
 				<div>

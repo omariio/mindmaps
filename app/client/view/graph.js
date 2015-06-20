@@ -28,7 +28,7 @@ Template.graph.rendered = function(){
     .linkDistance(200)
     .linkStrength(.5)
     .charge(-160)
-    .gravity(.03)
+    .gravity(.04)
     .size([1200, 500])
     .on("tick", tick)
 
@@ -78,7 +78,6 @@ Template.graph.rendered = function(){
       DOMnodes.enter()
         .append("circle")
         .attr("class", "node unread statement") // here's the difference, also the statement part is a bit ratchet.
-        .attr("r", function(d) { return (Math.sqrt(d.value*d.value) + 5) * 1.5; }) // handles negative values
         .attr("_id", function(d) { return "node" + d._id; })
         .on("mouseover", mouseover)
         .on("dblclick", doubleclick)
