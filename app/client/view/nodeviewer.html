@@ -13,7 +13,13 @@
 				value: {{selected.value}}
 			</div>
 			<div>
-				Body: {{selected.body}} <i id="edit-body" class="fa fa-pencil"></i>
+				Body:
+				{{#if editingBody}}
+					<textarea id="textarea-body">{{selected.body}}</textarea>
+					<button id="save-body">save</button>
+				{{else}}
+					{{selected.body}} <a><i id="edit-body" class="fa fa-pencil"></i></a>
+				{{/if}}
 			</div>
 			<div>
 				<input id="delete-node" type="button" value="delete"/>
