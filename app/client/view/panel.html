@@ -12,6 +12,15 @@
 					{{/if}}
 				</div>
 				<div>
+					Title:
+					{{#if editingTitle}}
+						<input type="text" id="input-title" value="{{selected.title}}" />
+						<button id="save-title">save</button>
+					{{else}}
+						{{selected.title}} <a><i id="edit-title" class="fa fa-pencil"></i></a>
+					{{/if}}
+				</div>
+				<div>
 					Body:
 					{{#if editingBody}}
 						<textarea id="textarea-body">{{selected.body}}</textarea>

@@ -1,4 +1,5 @@
 var newLink;
+var circleRadius = 50;
 
 Template.graph.rendered = function(){
 
@@ -8,9 +9,11 @@ Template.graph.rendered = function(){
   Session.set("selected", Router.current().params._id);
   var self = this;
 
+  // Look into re-writing this
   self.graphElem = d3.select('#graph');
   self.edges = self.graphElem.select('#edges');
   self.nodes = self.graphElem.select('#nodes');
+  self.texts = self.graphElem.select("#texts");
 
   var nodes = []
   var links = []
@@ -25,7 +28,7 @@ Template.graph.rendered = function(){
     .linkDistance(200)
     .linkStrength(.5)
     .charge(-160)
-    .gravity(.05)
+    .gravity(.03)
     .size([1200, 500])
     .on("tick", tick)
 
@@ -63,10 +66,10 @@ Template.graph.rendered = function(){
     if(isFresh){
       DOMnodes.enter()
         .append("circle")
-        .attr("class",function(d) { return "node"})
-        .attr("_id", function(d) { return "node" + d._id; })
-        .on("mouseover", mouseover)
-        .on("dblclick", doubleclick)
+          .attr("class",function(d) { return "node"})
+          .attr("_id", function(d) { return "node" + d._id; })
+          .on("mouseover", mouseover)
+          .on("dblclick", doubleclick)
         .call(force.drag());
 
         selectHighlighted();
@@ -81,6 +84,22 @@ Template.graph.rendered = function(){
         .on("dblclick", doubleclick)
         .call(force.drag());
     }
+    console.log(nodes);
+    console.log("started");
+    console.log(self.texts.selectAll("*"))
+    self.texts.selectAll("*").remove();
+    console.log(self.texts.selectAll("*"))
+    var untitled = _.filter(nodes, function(node){return !!node.title;});
+    self.texts.selectAll("*")
+      .data(nodes, function(d) {return d._id})
+        .enter()
+          .append("text")
+            .text(function(d){ return d.title; })
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12")
+            .classed("unselectable", true);
+
+    console.log(self.texts.selectAll("*"))
 
     // FIXME- This won't work as expected, get it to run like data selection.
     DOMnodes.exit()
@@ -89,7 +108,7 @@ Template.graph.rendered = function(){
     force
       .nodes(nodes)
       .start()
-  })
+  });
 
   // Calculates link changes.
   Deps.autorun(function(){
@@ -173,7 +192,7 @@ Template.graph.rendered = function(){
       var s1 = source;
 
       var slope = (s2.y - s1.y) / (s2.x - s1.x);
-      var radius = 20;
+      var radius = circleRadius;
 
       var tanx = radius / Math.sqrt(Math.pow(slope,2) + 1);
       var arrowLength = 10;
@@ -206,6 +225,10 @@ Template.graph.rendered = function(){
       .attr("cy", function(d) { return d.y; });
 
     node.each(collide(0.5, {nodes:nodes, links:links}));
+
+    d3.select("#texts").selectAll("*")
+      .attr("x", function(d){ return d.x; })
+      .attr("y", function(d){ return d.y; });
   }
 
   function mouseover(d) {
@@ -291,6 +314,8 @@ Template.graph.rendered = function(){
       p.classed('selected', true);
 
     Session.set('selected', mousedOver._id);
+    Session.set("editing-title", false);
+    Session.set("editing-body", false);
     checkNotification();
   }
 }
@@ -313,7 +338,7 @@ function State(name, data){
 //http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
 function collide(alpha, graph) {
   var padding = 1, // separation between circles
-      radius=50;
+      radius=circleRadius;
 
   var quadtree = d3.geom.quadtree(graph.nodes);
   return function(d) {

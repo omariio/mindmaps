@@ -14,6 +14,9 @@ Template.panel.registeredCommenter = function () {
 }
 
 Template.panel.helpers({
+  editingTitle: function(){
+    return Session.get("editing-title");
+  },
   editingBody: function(){
     return Session.get("editing-body");
   }
@@ -25,6 +28,13 @@ Template.panel.events({
 		Meteor.call("deleteNode", Session.get("selected"));
 		Session.set("selected", undefined);
 	},
+  'click #edit-title': function () {
+    Session.set("editing-title", true);
+  },
+  'click #save-title': function () {
+    Nodes.update(Session.get("selected"), {$set:{title:$("#input-title").val()}});
+    Session.set("editing-title", false);
+  },
   'click #edit-body': function () {
     Session.set("editing-body", true);
   },
@@ -33,7 +43,7 @@ Template.panel.events({
     Session.set("editing-body", false);
   },
   'click #new-node': function () {
-    var target_id = Nodes.findOne({_id:Session.get("target_id")}).root_id
-    Nodes.insert({body:"", title:"", root_id: target_id, value:0});
+    var target_id = Nodes.findOne({_id:Session.get("target_id")}).root_id;
+    Nodes.insert({body:"", title:"", root_id: target_id, username:Meteor.user().username});
   }
 })

@@ -17,25 +17,6 @@ Template.layout.events({
   }
 })
 
-Template.dropper.events({
-  'click #drop': function(){
-    Meteor.call('dropNodes', Session.get("target_id"));
-  }
-});
-
-// FIXME: THIS IS NOT SECURE
-Template.dropper.isUserAdmin = function(){
-  if(Meteor.user() && Meteor.user().emails){
-    var adminEmail = Meteor.user().emails[0].address;
-    if( adminEmail === "tylsmith@gmail.com"){
-      return true;
-    } else {
-      return false;
-      //add some logic for displaying error template.
-    }
-  }
-}
-
 // The helper and function are separate so that the function can be called within
 // other helpers, but we don't need to redefine the helper every time we want to use
 // it.
@@ -79,7 +60,7 @@ Accounts.ui.config({
 
 // If target is node:
 // 	if root is self:
-// 		find all nodes and edges with root as target root 
+// 		find all nodes and edges with root as target root
 // 	else if root is not self
 // 		find all nodes and edges with root as target root
 
