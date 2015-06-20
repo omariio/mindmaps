@@ -188,10 +188,11 @@ select:hover {
 	right:2%;
 	top:5%;
 	left:70%;
-	bottom:50%;
+  bottom:2%;
 
 	border-color:black;
 	border:1px solid;
+  
 	overflow-y:auto;
 	z-index:1;
 }
@@ -238,4 +239,3 @@ select:hover {
 .create-topic-navigation {
 	text-align: center;
 }
-
