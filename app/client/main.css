@@ -115,6 +115,7 @@
 }
 
 #edges {
+  stroke: #000;
   stroke-width: 1px;
 }
 
@@ -192,7 +193,7 @@ select:hover {
 
 	border-color:black;
 	border:1px solid;
-  
+
 	overflow-y:auto;
 	z-index:1;
 }

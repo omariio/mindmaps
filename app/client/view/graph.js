@@ -162,12 +162,7 @@ Template.graph.rendered = function(){
         newLink.attr("y2", offsets.y);
       });
 
-      self.graphElem.on('click', chooseTarget);
-    }
-    // after the edge target is chosen, confirm submission
-    else if(state.name == "submittingEdge"){
-      self.graphElem.on('mousemove', null);
-      self.graphElem.on('click', selectHighlighted);
+      self.graphElem.on('click', createEdge);
     }
 
     checkNotification();
@@ -248,7 +243,7 @@ Template.graph.rendered = function(){
     Session.set("state", new State("chooseTarget", {source:d} ));
   }
 
-  function chooseTarget(){
+  function createEdge(){
     var source = Session.get("state").data.source
     var clickedElem_id = d3.select(d3.event.target).attr('_id');
     if(clickedElem_id && clickedElem_id.indexOf("node") != -1){
@@ -258,12 +253,10 @@ Template.graph.rendered = function(){
         source: source_id,
         target: target_id
       }
-      Session.set("state", new State("submittingEdge", newEdge));
+      Links.insert(newEdge);
     }
-    else{
-      Session.set("state", new State("view"));
-    }
-
+    Session.set("state", new State("view"));
+    self.graphElem.on('click', selectHighlighted);
     self.graphElem.on('mousemove', null);
   }
 
