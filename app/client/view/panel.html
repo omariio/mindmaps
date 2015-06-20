@@ -1,0 +1,29 @@
+
+<template name="panel">
+	<div id="panel">
+		<button id="new-node">new</button>
+		<div id="nodeviewer">
+			<div class="viewer-padding">
+				<div>
+					{{#if registeredCommenter}}
+						Username: <a href="/user/{{registeredCommenter.username}}"> <em class="text-username">{{selected.username}} </em> </a>
+					{{else}}
+						Username: {{selected.username}}
+					{{/if}}
+				</div>
+				<div>
+					Body:
+					{{#if editingBody}}
+						<textarea id="textarea-body">{{selected.body}}</textarea>
+						<button id="save-body">save</button>
+					{{else}}
+						{{selected.body}} <a><i id="edit-body" class="fa fa-pencil"></i></a>
+					{{/if}}
+				</div>
+				<div>
+					<input id="delete-node" type="button" value="delete"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

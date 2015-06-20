@@ -1,25 +1,26 @@
 
 // At some point, this should maybe grab the local copy of the data instead
 // of the database copy
-Template.nodeviewer.selected = function () {
+Template.panel.selected = function () {
   var selected_id = Session.get("selected");
   return Nodes.findOne({_id: selected_id}) || Links.findOne({_id: selected_id});
 }
 
-Template.nodeviewer.registeredCommenter = function () {
-	var selected = Template.nodeviewer.selected();
+Template.panel.registeredCommenter = function () {
+	var selected = Template.panel.selected();
 	if (selected && selected.user)
 		return selected.user;
 	return null;
 }
 
-Template.nodeviewer.helpers({
+Template.panel.helpers({
   editingBody: function(){
     return Session.get("editing-body");
   }
 });
 
-Template.nodeviewer.events({
+Template.panel.events({
+
 	'click #delete-node': function () {
 		Meteor.call("deleteNode", Session.get("selected"));
 		Session.set("selected", undefined);
@@ -30,5 +31,9 @@ Template.nodeviewer.events({
   'click #save-body': function() {
     Nodes.update(Session.get("selected"), {$set:{body:$("#textarea-body").val()}});
     Session.set("editing-body", false);
+  },
+  'click #new-node': function () {
+    var target_id = Nodes.findOne({_id:Session.get("target_id")}).root_id
+    Nodes.insert({body:"", title:"", root_id: target_id, value:0});
   }
 })
