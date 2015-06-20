@@ -204,6 +204,8 @@ Template.graph.rendered = function(){
 
     node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
+
+    node.each(collide(0.5, {nodes:nodes, links:links}));
   }
 
   function mouseover(d) {
@@ -306,4 +308,34 @@ var checkNotification = function(){
 function State(name, data){
   this.name = name;
   this.data = data;
+}
+
+//http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
+function collide(alpha, graph) {
+  var padding = 1, // separation between circles
+      radius=50;
+
+  var quadtree = d3.geom.quadtree(graph.nodes);
+  return function(d) {
+    var rb = 2*radius + padding,
+        nx1 = d.x - rb,
+        nx2 = d.x + rb,
+        ny1 = d.y - rb,
+        ny2 = d.y + rb;
+    quadtree.visit(function(quad, x1, y1, x2, y2) {
+      if (quad.point && (quad.point !== d)) {
+        var x = d.x - quad.point.x,
+            y = d.y - quad.point.y,
+            l = Math.sqrt(x * x + y * y);
+          if (l < rb) {
+          l = (l - rb) / l * alpha;
+          d.x -= x *= l;
+          d.y -= y *= l;
+          quad.point.x += x;
+          quad.point.y += y;
+        }
+      }
+      return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+    });
+  };
 }
